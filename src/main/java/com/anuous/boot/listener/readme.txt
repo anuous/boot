@@ -1,0 +1,6 @@
+事件触发顺序如下：
+ApplicationEnvironmentPreparedEvent： springBoot启动 spring boot 对应Enviroment已经准备完毕，但此时上下文context还没有创建。
+
+ApplicationPreparedEvent： springBoot启动 spring boot上下文context创建完成，但此时spring中的bean是没有完全加载完成的。
+
+ApplicationStartedEvent：
