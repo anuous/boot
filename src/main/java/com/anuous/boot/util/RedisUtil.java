@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,8 +22,9 @@ import redis.clients.jedis.SortingParams;
 @Component
 public class RedisUtil{
 
-    Logger log = LoggerFactory.getLogger(RedisUtil.class);
-    @Autowired
+   private  Logger log = LoggerFactory.getLogger(RedisUtil.class);
+
+   @Autowired
     private JedisPool jedisPool;
 
     /**
@@ -33,7 +35,7 @@ public class RedisUtil{
      * 并释放连接
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param indexdb 选择redis库 0-15
      * @return 成功返回value 失败返回null
      */
@@ -62,7 +64,7 @@ public class RedisUtil{
      * 并释放连接
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param indexdb 选择redis库 0-15
      * @return 成功返回value 失败返回null
      */
@@ -89,7 +91,7 @@ public class RedisUtil{
      * 如果key已经存在 则覆盖
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param value
      * @param indexdb 选择redis库 0-15
      * @return 成功 返回OK 失败返回 0
@@ -116,7 +118,7 @@ public class RedisUtil{
      * 如果key已经存在 则覆盖
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param value
      * @param indexdb 选择redis库 0-15
      * @return 成功 返回OK 失败返回 0
@@ -205,7 +207,7 @@ public class RedisUtil{
      * 通过key向指定的value值追加值
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param str
      * @return 成功返回 添加后value的长度 失败 返回 添加的 value 的长度 异常返回0L
      */
@@ -230,7 +232,7 @@ public class RedisUtil{
      * 判断key是否存在
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return true OR false
      */
     public Boolean exists(String key) {
@@ -272,7 +274,7 @@ public class RedisUtil{
      * 为给定 key 设置生存时间，当 key 过期时(生存时间为 0 )，它会被自动删除。
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param value
      *            过期时间，单位：秒
      * @return 成功返回1 如果存在 和 发生异常 返回 0
@@ -296,7 +298,7 @@ public class RedisUtil{
      * 以秒为单位，返回给定 key 的剩余生存时间
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return 当 key 不存在时，返回 -2 。当 key 存在但没有设置剩余生存时间时，返回 -1 。否则，以秒为单位，返回 key
      *         的剩余生存时间。 发生异常 返回 0
      */
@@ -320,7 +322,7 @@ public class RedisUtil{
      * 移除给定 key 的生存时间，将这个 key 从『易失的』(带生存时间 key )转换成『持久的』(一个不带生存时间、永不过期的 key )
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return 当生存时间移除成功时，返回 1 .如果 key 不存在或 key 没有设置生存时间，返回 0 ， 发生异常 返回 -1
      */
     public Long persist(String key) {
@@ -342,7 +344,7 @@ public class RedisUtil{
      * 新增key,并将 key 的生存时间 (以秒为单位)
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param seconds
      *            生存时间 单位：秒
      * @param value
@@ -367,7 +369,7 @@ public class RedisUtil{
      * 设置key value,如果key已经存在则返回0,nx==> not exist
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param value
      * @return 成功返回1 如果存在 和 发生异常 返回 0
      */
@@ -393,7 +395,7 @@ public class RedisUtil{
      * 当 key 存在但不是字符串类型时，返回一个错误。
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param value
      * @return 返回给定 key 的旧值。当 key 没有旧值时，也即是， key 不存在时，返回 nil
      */
@@ -416,7 +418,7 @@ public class RedisUtil{
      * 设置key value并制定这个键值的有效期
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param value
      * @param seconds
      *            单位:秒
@@ -463,7 +465,7 @@ public class RedisUtil{
      * RES : bigsea.abc.cn
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param str
      * @param offset
      *            下标位置
@@ -571,7 +573,7 @@ public class RedisUtil{
      * 设置key的值,并返回一个旧值
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param value
      * @return 旧值 如果key不存在 则返回null
      */
@@ -595,7 +597,7 @@ public class RedisUtil{
      * 通过下标 和key 获取指定下标位置的 value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param startOffset
      *            开始位置 从0 开始 负数表示从右边开始截取
      * @param endOffset
@@ -621,7 +623,7 @@ public class RedisUtil{
      * 通过key 对value进行加值+1操作,当value不是int类型时会返回错误,当key不存在是则value为1
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return 加值后的结果
      */
     public Long incr(String key) {
@@ -644,7 +646,7 @@ public class RedisUtil{
      * 通过key给指定的value加值,如果key不存在,则这是value为该值
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param integer
      * @return
      */
@@ -668,7 +670,7 @@ public class RedisUtil{
      * 对key的值做减减操作,如果key不存在,则设置key为-1
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public Long decr(String key) {
@@ -691,7 +693,7 @@ public class RedisUtil{
      * 减去指定的值
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param integer
      * @return
      */
@@ -715,7 +717,7 @@ public class RedisUtil{
      * 通过key获取value值的长度
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return 失败返回null
      */
     public Long serlen(String key) {
@@ -738,7 +740,7 @@ public class RedisUtil{
      * 通过key给field设置指定的值,如果key不存在,则先创建
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param field
      *            字段
      * @param value
@@ -764,7 +766,7 @@ public class RedisUtil{
      * 通过key给field设置指定的值,如果key不存在则先创建,如果field已经存在,返回0
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param field
      * @param value
      * @return
@@ -789,7 +791,7 @@ public class RedisUtil{
      * 通过key同时设置 hash的多个field
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param hash
      * @return 返回OK 异常返回null
      */
@@ -814,7 +816,7 @@ public class RedisUtil{
      * 通过key 和 field 获取指定的 value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param field
      * @return 没有返回null
      */
@@ -838,7 +840,7 @@ public class RedisUtil{
      * 通过key 和 fields 获取指定的value 如果没有对应的value则返回null
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param fields
      *            可以使 一个String 也可以是 String数组
      * @return
@@ -864,7 +866,7 @@ public class RedisUtil{
      * 通过key给指定的field的value加上给定的值
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param field
      * @param value
      * @return
@@ -889,7 +891,7 @@ public class RedisUtil{
      * 通过key和field判断是否有指定的value存在
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param field
      * @return
      */
@@ -913,7 +915,7 @@ public class RedisUtil{
      * 通过key返回field的数量
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public Long hlen(String key) {
@@ -937,7 +939,7 @@ public class RedisUtil{
      * 通过key 删除指定的 field
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param fields
      *            可以是 一个 field 也可以是 一个数组
      * @return
@@ -962,7 +964,7 @@ public class RedisUtil{
      * 通过key返回所有的field
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public Set<String> hkeys(String key) {
@@ -985,7 +987,7 @@ public class RedisUtil{
      * 通过key返回所有和key有关的value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public List<String> hvals(String key) {
@@ -1008,7 +1010,7 @@ public class RedisUtil{
      * 通过key获取所有的field和value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public Map<String, String> hgetall(String key, int indexdb) {
@@ -1031,7 +1033,7 @@ public class RedisUtil{
      * 通过key向list头部添加字符串
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param strs
      *            可以使一个string 也可以使string数组
      * @return 返回list的value个数
@@ -1057,7 +1059,7 @@ public class RedisUtil{
      * 通过key向list尾部添加字符串
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param strs
      *            可以使一个string 也可以使string数组
      * @return 返回list的value个数
@@ -1082,7 +1084,7 @@ public class RedisUtil{
      * 通过key在list指定的位置之前或者之后 添加字符串元素
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param where
      *            LIST_POSITION枚举类型
      * @param pivot
@@ -1115,7 +1117,7 @@ public class RedisUtil{
      * 如果下标超过list里面value的个数则报错
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param index
      *            从0开始
      * @param value
@@ -1141,7 +1143,7 @@ public class RedisUtil{
      * 通过key从对应的list中删除指定的count个 和 value相同的元素
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param count
      *            当count为0时删除全部
      * @param value
@@ -1167,7 +1169,7 @@ public class RedisUtil{
      * 通过key保留list中从strat下标开始到end下标结束的value值
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param start
      * @param end
      * @return 成功返回OK
@@ -1192,7 +1194,7 @@ public class RedisUtil{
      * 通过key从list的头部删除一个value,并返回该value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     synchronized public String lpop(String key) {
@@ -1215,7 +1217,7 @@ public class RedisUtil{
      * 通过key从list尾部删除一个value,并返回该元素
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     synchronized public String rpop(String key, int indexdb) {
@@ -1267,7 +1269,7 @@ public class RedisUtil{
      * 通过key获取list中指定下标位置的value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param index
      * @return 如果没有返回null
      */
@@ -1291,7 +1293,7 @@ public class RedisUtil{
      * 通过key返回list的长度
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public Long llen(String key) {
@@ -1317,7 +1319,7 @@ public class RedisUtil{
      * 如果start 为 0 end 为 -1 则返回全部的list中的value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param start
      * @param end
      * @return
@@ -1343,7 +1345,7 @@ public class RedisUtil{
      * 将列表 key 下标为 index 的元素的值设置为 value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param index
      * @param value
      * @return 操作成功返回 ok ，否则返回错误信息
@@ -1367,7 +1369,7 @@ public class RedisUtil{
      * 返回给定排序后的结果
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param sortingParameters
      * @return 返回列表形式的排序结果
      */
@@ -1390,7 +1392,7 @@ public class RedisUtil{
      * 返回排序后的结果，排序默认以数字作为对象，值被解释为双精度浮点数，然后进行比较。
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return 返回列表形式的排序结果
      */
     public List<String> sort(String key) {
@@ -1412,7 +1414,7 @@ public class RedisUtil{
      * 通过key向指定的set中添加value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param members
      *            可以是一个String 也可以是一个String数组
      * @return 添加成功的个数
@@ -1437,7 +1439,7 @@ public class RedisUtil{
      * 通过key删除set中对应的value值
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param members
      *            可以是一个String 也可以是一个String数组
      * @return 删除的个数
@@ -1462,7 +1464,7 @@ public class RedisUtil{
      * 通过key随机删除一个set中的value并返回该值
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public String spop(String key) {
@@ -1667,7 +1669,7 @@ public class RedisUtil{
      * 通过key获取set中value的个数
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public Long scard(String key) {
@@ -1690,7 +1692,7 @@ public class RedisUtil{
      * 通过key判断value是否是set中的元素
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param member
      * @return
      */
@@ -1714,7 +1716,7 @@ public class RedisUtil{
      * 通过key获取set中随机的value,不删除元素
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public String srandmember(String key) {
@@ -1737,7 +1739,7 @@ public class RedisUtil{
      * 通过key获取set中所有的value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public Set<String> smembers(String key) {
@@ -1763,7 +1765,7 @@ public class RedisUtil{
      * 如果该value已经存在则根据score更新元素
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param score
      * @param member
      * @return
@@ -1788,7 +1790,7 @@ public class RedisUtil{
      * 返回有序集 key 中，指定区间内的成员。min=0,max=-1代表所有元素
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param min
      * @param max
      * @return 指定区间内的有序集成员的列表。
@@ -1812,7 +1814,7 @@ public class RedisUtil{
      * 统计有序集 key 中,值在 min 和 max 之间的成员的数量
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param min
      * @param max
      * @return 值在 min 和 max 之间的成员的数量。异常返回0
@@ -1842,7 +1844,7 @@ public class RedisUtil{
      * 将名称为key的hash中field的value增加integer
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param value
      * @param increment
      * @return 执行 HINCRBY 命令之后，哈希表 key 中域 field的值。异常返回0
@@ -1866,7 +1868,7 @@ public class RedisUtil{
      * 通过key删除在zset中指定的value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param members
      *            可以使一个string 也可以是一个string数组
      * @return
@@ -1891,7 +1893,7 @@ public class RedisUtil{
      * 通过key增加该zset中value的score的值
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param score
      * @param member
      * @return
@@ -1919,7 +1921,7 @@ public class RedisUtil{
      * 下标从小到大排序
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param member
      * @return
      */
@@ -1946,7 +1948,7 @@ public class RedisUtil{
      * 下标从大到小排序
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param member
      * @return
      */
@@ -1976,7 +1978,7 @@ public class RedisUtil{
      * 当start为0 end为-1时返回全部
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param start
      * @param end
      * @return
@@ -2001,7 +2003,7 @@ public class RedisUtil{
      * 通过key返回指定score内zset中的value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param max
      * @param min
      * @return
@@ -2026,7 +2028,7 @@ public class RedisUtil{
      * 通过key返回指定score内zset中的value
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param max
      * @param min
      * @return
@@ -2051,7 +2053,7 @@ public class RedisUtil{
      * 返回指定区间内zset中value的数量
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param min
      * @param max
      * @return
@@ -2076,7 +2078,7 @@ public class RedisUtil{
      * 通过key返回zset中的value个数
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public Long zcard(String key) {
@@ -2099,7 +2101,7 @@ public class RedisUtil{
      * 通过key获取zset中value的score值
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param member
      * @return
      */
@@ -2123,7 +2125,7 @@ public class RedisUtil{
      * 通过key删除给定区间内的元素
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param start
      * @param end
      * @return
@@ -2148,7 +2150,7 @@ public class RedisUtil{
      * 通过key删除指定score内的元素
      * </p>
      *
-     * @param key
+     * @param key 键
      * @param start
      * @param end
      * @return
@@ -2219,7 +2221,7 @@ public class RedisUtil{
      * 通过key判断值得类型
      * </p>
      *
-     * @param key
+     * @param key 键
      * @return
      */
     public String type(String key) {
@@ -2304,5 +2306,8 @@ public class RedisUtil{
 		for (String string : str) {
 			System.out.println(string);
 		}*/
+
+        BigDecimal a = new BigDecimal(1);
+
     }
 }

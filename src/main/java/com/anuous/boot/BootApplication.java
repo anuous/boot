@@ -13,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.SQLOutput;
 import java.util.ResourceBundle;
 
 @SpringBootApplication
@@ -27,10 +28,18 @@ public class BootApplication {
         application.addListeners(new MyApplicationFailedEventListener());
         ApplicationContext context = application.run(args);
        String [] beannNames = context.getBeanDefinitionNames();
-       for(int i =0,size = beannNames.length;i<size;i++){
+       /*for(int i =0,size = beannNames.length;i<size;i++){
            System.out.println(i+"\t"+ beannNames[i]);
-       }
+       }*/
 
+       BigDecimal a = new BigDecimal(1);
+        //System.out.println(a);
+        BigDecimal b = new BigDecimal(2);
+        BigDecimal c = new BigDecimal(0);
+        c = a.add(b);
+        System.out.println(c);
+        c=c.add(a);
+        System.out.println(c);
 
     }
 
