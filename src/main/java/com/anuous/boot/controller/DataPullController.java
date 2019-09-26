@@ -16,20 +16,11 @@ import java.util.List;
 public class DataPullController {
 
     public static void  main(String[] agrs) throws IOException {
-        Document doc = Jsoup.connect("http://www.tcmap.com.cn/list/daima_list.html").get();
-        Elements list360 = doc.getElementsByAttributeValue("id","list360");
-       System.out.println(list360.size());
-       List<String> lists = list360.eachText();
-        for (String str:lists) {
-           String[] res= str.split(" ");
-            for (String s: res) {
-                if(StringUtils.isEmpty(s.trim())){
-                    continue;
-                }
-                System.out.print(s.trim()+" ");
-            }
-            System.out.println();
-        }
+        String url1 = "https://hr360.tcl.com/Exam/Evaluate360/Exam?ProjectId=1624&moduleId=1031462&pageIndex=2&pid=0&IsIndividual=False";
+        String url="https://hr360.tcl.com/Exam/Home/InvisibleLogin?code=JVb%2fxKoE8sX9eIziZCp2sHvnGkfbPkZX2Zsb4BEPSRcYZfJW8p%2bc7AuLCRDjA71rn7COLJ7IsHrtJk6%2bfJXESQ%3d%3d";
+        Document doc = Jsoup.connect(url).get();
+        String list360 = doc.outerHtml();
+       System.out.println(list360);
 
 
 

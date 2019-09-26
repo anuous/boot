@@ -9,6 +9,9 @@ import org.springframework.context.annotation.PropertySource;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+/**
+ * redis 单机连接配置
+ */
 @Configuration
 @PropertySource("classpath:config/redis.properties")
 public class JedisConfig {
