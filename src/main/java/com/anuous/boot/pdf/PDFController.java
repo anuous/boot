@@ -63,7 +63,42 @@ public class PDFController {
 
     @RequestMapping(method= RequestMethod.GET,value = "/table")
     public void createTable(HttpServletResponse response) throws  Exception{
-       // PpdfUtils.createTable();
+
+        response.setContentType(MediaType.APPLICATION_PDF_VALUE);
+        String[] headers=new String[]{"发票号码","发票代码","开票日期","购货方","销货方（经销商）","发票金额"};
+        List<Invoice> invoices = new ArrayList<Invoice>();
+        int res =0;
+        while(res<102){
+            Invoice tmp = new  Invoice("10001"+res,"1","20191029", "木森林股份有限公司","世界上最长的公司是我家是我家是我家是我家是我家是我家","100000");
+            invoices.add(tmp);
+            res++;
+        }
+        String tempfilePath ="";
+        FileInputStream fis = null;
+        try {
+            tempfilePath= PpdfUtils.insertTablesToPDF(headers,invoices);
+            fis= new FileInputStream(tempfilePath);
+            byte[] re = {};
+            ByteArrayInputStream bis = new ByteArrayInputStream(re);
+
+            IOUtils.copy (fis, response.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            if(fis!=null){
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(tempfilePath!=null && tempfilePath.length()>0){
+                File file = new File(tempfilePath);
+                if(file.isFile()){
+                    file.delete();
+                }
+            }
+        }
     }
 
     @RequestMapping(method= RequestMethod.GET,value = "/fillTable")

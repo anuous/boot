@@ -19,11 +19,17 @@ public class HelloController {
 
     Logger log = LoggerFactory.getLogger(HelloController.class);
 
-    @Autowired
-    private RedisUtil redisUtil;
+    //@Autowired
+    private final RedisUtil redisUtil;
+
+    //@Autowired
+    private final AopLearnService aopLearnService;
 
     @Autowired
-    private AopLearnService aopLearnService;
+    public HelloController(RedisUtil redisUtil,AopLearnService aopLearnService){
+        this.redisUtil=redisUtil;
+        this.aopLearnService=aopLearnService;
+    }
 
     //@Autowired
     private JedisCluster jedisCluster;

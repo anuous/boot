@@ -9,6 +9,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.layout.LayoutArea;
 import com.itextpdf.layout.layout.LayoutResult;
@@ -71,11 +72,16 @@ public class PDFUtils {
             form.getField(key).setValue(paramValues.get(key), font, fontSize);
         }
         tmpPdf1.close();
+
+        /**========================================**/
+
+        /**========================================**/
         //2、生产表格临时PDF文件2
         PdfDocument tmpPdf2 = new PdfDocument( new PdfWriter(tmp2));
         Document doc = new Document(tmpPdf2, new PageSize(PageSize.A4));
         //doc.setMargins(40, 30, 30, 30);
         Table table = createTables(headers,invoices);
+
         doc.add(table);
         //doc.setRenderer(new DocumentRenderer(doc));
         doc.close();
@@ -150,5 +156,18 @@ public class PDFUtils {
         }
 
     }
+    public String insertTablesToPDF(String[] headers,List<Invoice> invoices)throws Exception{
+        PdfDocument tmpPdf1 = new PdfDocument(new PdfReader(tempaltePath), new PdfWriter(desc));
+        Document document = new Document(tmpPdf1,tmpPdf1.getDefaultPageSize(),false);
+        Table table = createTables(headers,invoices);
+        //document.add(table);
 
+        Paragraph php = new Paragraph();
+        php.add(table);
+        //document.relayout();
+        document.add(php);
+        document.flush();
+        tmpPdf1.close();
+        return desc;
+    }
 }
