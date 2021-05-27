@@ -5,15 +5,12 @@ import com.anuous.boot.listener.MyApplicationFailedEventListener;
 import com.anuous.boot.listener.MyApplicationPreparedEventListener;
 import com.anuous.boot.listener.MyApplicationStartedEventListener;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ApplicationContext;
 
-@SpringBootApplication(scanBasePackages = {"com.anuous.boot"})
-@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-@EnableDiscoveryClient
+@SpringBootApplication(scanBasePackages = {"com.anuous.boot"},exclude = DataSourceAutoConfiguration.class)
+//@EnableDiscoveryClient
 public class BootApplication {
 
     private  int value;
